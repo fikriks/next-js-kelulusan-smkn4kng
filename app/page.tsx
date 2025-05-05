@@ -1,103 +1,138 @@
-import Image from "next/image";
+"use client";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import {
+  Card,
+  CardContent,
+  CardFooter
+} from "@/components/ui/card"
+import { BackgroundLines } from "@/components/ui/background-lines";
+
+const TARGET_DATE = new Date("2025-05-05T11:00:00Z"); // 18:00 WIB = 11:00 UTC
+
+function getTimeLeft() {
+  const now = new Date();
+  const diff = TARGET_DATE.getTime() - now.getTime();
+  if (diff <= 0) return null;
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+  return { days, hours, minutes, seconds };
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [timeLeft, setTimeLeft] = useState(getTimeLeft());
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+  useEffect(() => {
+    if (!timeLeft) return;
+    const timer = setInterval(() => {
+      setTimeLeft(getTimeLeft());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  return (
+    <BackgroundLines>
+      <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+        {/* Logo */}
+        <motion.img
+          src="/logo.png"
+          alt="Logo SMKN 4 Kuningan"
+          className="mb-8 w-50 md:w-10 xl:w-100 object-contain z-10"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.2 }}
+        />
+        <motion.h2
+          className="bg-clip-text text-transparent text-center bg-gradient-to-b from-neutral-900 to-neutral-700 dark:from-neutral-600 dark:to-white text-2xl md:text-4xl lg:text-7xl font-sans py-2 md:py-5 relative z-20 font-bold tracking-tight"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.4 }}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          Pengumuman Kelulusan Kelas XII <br /> SMK Negeri 4 Kuningan
+        </motion.h2>
+        <motion.p
+          className="max-w-xl mx-auto text-sm md:text-lg text-neutral-700 dark:text-neutral-400 text-center mb-5 font-semibold"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.6 }}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          Tahun Pelajaran 2024/2025
+        </motion.p>
+        <motion.div
+          className="relative w-full max-w-xl z-10"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.8 }}
         >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          {timeLeft ? (
+            <motion.div
+              className="flex flex-col items-center gap-4 w-full"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 1 }}
+            >
+              <p className="text-base sm:text-lg text-gray-700 mb-1 font-medium">
+                Pengumuman akan dibuka dalam:
+              </p>
+              <div className="flex gap-3 sm:gap-5 text-lg sm:text-2xl font-mono">
+                {["hari", "jam", "menit", "detik"].map((label, idx) => {
+                  const value = [timeLeft.days, timeLeft.hours, timeLeft.minutes, timeLeft.seconds][idx];
+                  return (
+                    <div key={label} className="flex flex-col items-center">
+                      <span className="bg-gray-100 px-4 py-2 rounded-xl shadow-md text-gray-900 min-w-[48px] text-center font-bold transition-all duration-300 animate-pulse">
+                        {value.toString().padStart(2, "0")}
+                      </span>
+                      <span className="text-xs text-gray-500 mt-1 font-medium">{label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="text-sm text-gray-500 mt-2">
+                Pukul 18.00 WIB, 05 Mei 2025
+              </p>
+            </motion.div>
+          ) : (
+            <motion.div
+              className="flex flex-col items-center gap-4 mt-4"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 1 }}
+            >
+              <Card className="ms-2 me-2 shadow-lg">
+                <CardContent className="ms-2 me-2">
+                  <ol className="list-decimal">
+                    <li>Siapkan NISN (Nomor Induk Siswa Nasional)</li>
+                    <li>Klik <b>"Lihat Pengumuman Kelulusan"</b> dibawah</li>
+                    <li>Lalu masukan NISN kalian pada kolom <b>"Masukan nilai"</b>, lalu Enter, perhatikan pada kolom <b>Keterangan</b> yaa!</li>
+                    <li><i>Good Luck!</i></li>
+                  </ol>
+                </CardContent>
+                <CardFooter className="items-center justify-center">
+                  <button className="p-4 lg:p-4 md:p-2 sm:p-2 border-2 border-black dark:border-white uppercase bg-white text-black transition duration-200 text-sm shadow-[1px_1px_rgba(0,0,0),2px_2px_rgba(0,0,0),3px_3px_rgba(0,0,0),4px_4px_rgba(0,0,0),5px_5px_0px_0px_rgba(0,0,0)] dark:shadow-[1px_1px_rgba(255,255,255),2px_2px_rgba(255,255,255),3px_3px_rgba(255,255,255),4px_4px_rgba(255,255,255),5px_5px_0px_0px_rgba(255,255,255)] ">
+                    <a
+                      href="https://lookerstudio.google.com/u/0/reporting/81d8b4b9-0a53-433f-bf25-5909e4ba1f80/page/AsAJF"
+                      target="_blank"
+                      rel="noopener noreferrer">
+                      Lihat Pengumuman Kelulusan
+                    </a>
+                  </button>
+                </CardFooter>
+              </Card>
+            </motion.div>
+          )}
+        </motion.div>
+        <footer className="mt-10 text-xs text-gray-400 text-center z-10">
+          &copy; {new Date().getFullYear()} SMKN 4 Kuningan. All rights reserved.
+        </footer>
+        <style jsx global>{`
+          @keyframes fadein {
+            from { opacity: 0; transform: translateY(-20px);}
+            to { opacity: 1; transform: translateY(0);}
+          }
+        `}</style>
+      </div>
+    </BackgroundLines>
   );
 }
